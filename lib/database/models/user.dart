@@ -4,13 +4,13 @@ import 'package:template_flutter/database/models/base_model.dart';
 
 
 class User extends BaseModel {
-  final List<dynamic>? preferredTransports;
-  final List<dynamic>? frequentTransports;
-  final String trackingMode = "refresh"; // Default tracking mode; other modes will be supported later
-  final double? weight;
+  final List<dynamic> preferredTransports;
+  final List<dynamic> frequentTransports;
+  final String trackingMode;// Default tracking mode; other modes will be supported later
+  final double weight;
   final String? sustainabilityThoughts;
-  final int? lastResetMonth;
-  final int? lastResetYear;
+  final int lastResetMonth;
+  final int lastResetYear;
 
   // Constructor with named parameters and default values
 
@@ -19,6 +19,7 @@ class User extends BaseModel {
     required this.preferredTransports,
     required this.frequentTransports,
     required this.weight,
+    this.trackingMode = "refresh",
     this.sustainabilityThoughts,
     required this.lastResetMonth,
     required this.lastResetYear,
@@ -31,7 +32,8 @@ class User extends BaseModel {
       id: map['id'],
       preferredTransports: jsonDecode(map['preferred_transports']),
       frequentTransports: jsonDecode(map['frequent_transports']),
-      weight: map['weight'],
+      trackingMode: map['tracking_mode'],
+      weight: (map['weight'] as num).toDouble(),
       sustainabilityThoughts: map['sustainability_thoughts'],
       lastResetMonth: map['last_reset_month'],
       lastResetYear: map['last_reset_year'],

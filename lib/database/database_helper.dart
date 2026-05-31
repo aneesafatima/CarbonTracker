@@ -28,23 +28,23 @@ class DatabaseHelper {
           await db.execute('''
             CREATE TABLE user (
             id INTEGER PRIMARY KEY CHECK (id = 1),
-            preferred_transports TEXT,
-            frequent_transports TEXT,
-            tracking_mode TEXT,
-            weight REAL,
+            preferred_transports TEXT NOT NULL,
+            frequent_transports TEXT NOT NULL,
+            tracking_mode TEXT NOT NULL,
+            weight REAL NOT NULL,
             sustainability_thoughts TEXT,
-            last_reset_month INTEGER,
-            last_reset_year INTEGER
+            last_reset_month INTEGER NOT NULL,
+            last_reset_year INTEGER NOT NULL
           )
         ''');
           await db.execute('''
             CREATE TABLE trips (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date INTEGER,
-            distance REAL,
-            transport_mode TEXT,
-            carbon_emitted REAL,
-            carbon_saved REAL
+            date INTEGER NOT NULL,
+            distance REAL NOT NULL,
+            transport_mode TEXT NOT NULL,
+            carbon_emitted REAL NOT NULL,
+            carbon_saved REAL NOT NULL
           )
         ''');
         },
