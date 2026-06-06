@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const transportOptions = [
+const List<Map<String, Object>> transportOptions = [
   {'label': 'Walking', 'icon': Icons.directions_walk},
   {'label': 'Cycling', 'icon': Icons.directions_bike},
   {'label': 'Bus', 'icon': Icons.directions_bus},
@@ -8,7 +8,7 @@ const transportOptions = [
   {'label': 'Public Transport', 'icon': Icons.train},
 ];
 
-const trackingOptions = [
+const List<Map<String, Object>> trackingOptions = [
   {'label': 'Refresh Tracking', 'icon': Icons.refresh},
   {'label': 'High Tracking', 'icon': Icons.gps_fixed},
   {'label': 'Balanced Tracking', 'icon': Icons.balance},

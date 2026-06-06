@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:template_flutter/features/onboarding/screens/user_info.dart';
-import '../../features/onboarding/screens/onboarding.dart';
+import 'package:carbon_tracker/features/onboarding/screens/user_info.dart';
+import 'package:carbon_tracker/features/onboarding/screens/onboarding.dart';
 
 final router = GoRouter(
   routes: [

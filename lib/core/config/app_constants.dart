@@ -10,4 +10,7 @@ class AppColors {
   static const Color selectedOptionTextColor = Color(0xFF343F00);
   static const Color textDark = Color(0xFF1C1C1C);
   static const Color focusedColor = Color(0xFF55650C);
+  static const Color unselectedBorderColor = Color(0xFFC7C8B5);
+  static const Color modalBackgroundColor = Color(0xFFF2F0E0);
+  static const Color modalBorderColor = Color(0xFFD7D3BE);
 }

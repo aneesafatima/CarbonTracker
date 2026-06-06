@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/config/app_constants.dart';
-import '../data/onboarding_options.dart' as options;
-import '../data/privacy_policy_info.dart' as privacy;
-import '../data/tracking_modes_info.dart' as tracking;
-import '../widgets/modal.dart';
-
+import 'package:flutter/services.dart';
+import 'package:carbon_tracker/core/config/app_constants.dart';
+import 'package:carbon_tracker/features/onboarding/data/onboarding_options.dart' as options;
+import 'package:carbon_tracker/features/onboarding/data/privacy_policy_info.dart' as privacy;
+import 'package:carbon_tracker/features/onboarding/data/tracking_modes_info.dart' as tracking;
+import 'package:carbon_tracker/features/onboarding/widgets/modal.dart';
 
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({super.key});
@@ -15,9 +15,9 @@ class UserInfoScreen extends StatefulWidget {
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
   // Transport selections
-  final Set<String> _selectedTransport = {'Walking', 'Car'};
+  final Set<String> _selectedTransport = {};
 
-  // Tracking mode
+  // Only refresh tracking is available for now, but this allows for easy expansion in the future
   String _selectedTracking = 'Refresh Tracking';
 
   // Privacy policy agreement
@@ -68,8 +68,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               _readPrivacyPolicy = true;
                             });
                           }
-
-                          showInfoModal(context, privacy.PrivacyPolicyInfo["title"]!, privacy.PrivacyPolicyInfo["description"]!);
+                          showInfoModal(
+                            context,
+                            privacy.privacyPolicyInfo["title"] ??
+                                "Privacy Policy",
+                            privacy.privacyPolicyInfo["description"] ?? "",
+                          );
                         },
                         child: Text(
                           "Read our Privacy Policy",
@@ -171,7 +175,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   border: Border.all(
                     color: isSelected
                         ? AppColors.focusedColor
-                        : Color(0xFFC7C8B5),
+                        : AppColors.unselectedBorderColor,
                   ),
                 ),
                 child: Row(
@@ -224,8 +228,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             ),
             GestureDetector(
               onTap: () {
-                showInfoModal(context, tracking.TrackingModesInfo["title"]!, tracking.TrackingModesInfo["description"]!);
-              }, // ADD MODEL EXPLAINING FUNCTION
+                showInfoModal(
+                  context,
+                  tracking.trackingModesInfo["title"] ?? "Tracking modes",
+                  tracking.trackingModesInfo["description"] ?? "",
+                );
+              },
               child: Text(
                 'What do these mean?',
                 style: TextStyle(
@@ -264,7 +272,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   border: Border.all(
                     color: isSelected
                         ? AppColors.focusedColor
-                        : Color(0xFFC7C8B5),
+                        : AppColors.unselectedBorderColor,
                   ),
                 ),
                 child: Row(
@@ -314,12 +322,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: Color(0xFFF5F4E8),
+            color: AppColors.optionBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
             controller: _weightController,
             keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             style: TextStyle(fontSize: 15, color: AppColors.textDark),
             decoration: InputDecoration(
               hintText: 'e.g. 75',
@@ -364,7 +373,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         Container(
           height: 130,
           decoration: BoxDecoration(
-            color: Color(0xFFF5F4E8),
+            color: AppColors.optionBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(

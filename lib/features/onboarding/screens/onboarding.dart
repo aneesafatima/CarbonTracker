@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/config/app_constants.dart';
+import 'package:carbon_tracker/core/config/app_constants.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -11,85 +11,84 @@ class OnboardingScreen extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Padding(
-            // margin: const EdgeInsets.all(18),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Column(
-              children: [
-                // Image Placeholder
-                Expanded(
-                  child: ClipRRect(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
                       'assets/images/onboarding.jpg',
                       fit: BoxFit.cover,
                       width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.5,
                       semanticLabel:
                           "Trees and nature representing eco-friendliness and sustainability",
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                const Text(
-                  'EcoTrackr',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                const Text(
-                  'Eco-friendly fitness tracking for a\nbetter planet.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    height: 1.5,
-                    color: AppColors.subtitleText,
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.pushNamed('user-info');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.focusedColor,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Get Started',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  const Text(
+                    'EcoTrackr',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 16),
 
-                const Text(
-                  'Privacy & Earth Stewardship First.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.minisculeText,
+                  const Text(
+                    'Eco-friendly fitness tracking for a\nbetter planet.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      height: 1.5,
+                      color: AppColors.subtitleText,
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 30),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.pushNamed('user-info');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.focusedColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Get Started',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  const Text(
+                    'Privacy & Earth Stewardship First.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.minisculeText,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

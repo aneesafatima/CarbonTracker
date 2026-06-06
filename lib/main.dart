@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template_flutter/core/config/app_routes.dart';
+import 'package:carbon_tracker/core/config/app_routes.dart';
 import 'core/config/app_constants.dart';
 
 void main() {

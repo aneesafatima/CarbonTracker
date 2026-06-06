@@ -1,4 +1,4 @@
-const TrackingModesInfo = {
+const Map<String, String> trackingModesInfo = {
   'title': 'Tracking modes',
   'description': '''
 Choose a tracking mode that suits your needs:
