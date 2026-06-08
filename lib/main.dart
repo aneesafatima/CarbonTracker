@@ -1,4 +1,3 @@
-import 'package:carbon_tracker/database/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:carbon_tracker/core/config/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

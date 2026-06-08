@@ -48,6 +48,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   void dispose() {
     _weightController.dispose();
     _thoughtsController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
