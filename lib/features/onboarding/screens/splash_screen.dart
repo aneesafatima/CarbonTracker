@@ -14,8 +14,8 @@ class SplashScreen extends ConsumerStatefulWidget {
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
-    _checkUser();
     super.initState();
+    _checkUser();
   }
 
   Future<void> _checkUser() async {
@@ -24,13 +24,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (!mounted) return;
 
       if (user == null) {
-        router.pushNamed('onboarding');
+        router.goNamed('onboarding');
       } else {
         ref.read(userProvider.notifier).setUser(user);
         router.goNamed('fitness-metrics');
       }
-    } catch (e) {
-      print('Error checking user: $e');
+    } catch (e, st) {
+      debugPrint('Error checking user: $e\n$st');
+      if (!mounted) return;
+      router.goNamed('onboarding');
     }
   }
 

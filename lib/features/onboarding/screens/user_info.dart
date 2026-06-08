@@ -71,7 +71,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   User _buildUser() {
     return User(
       id: 1,
-      name: _name,
+      name: _name.trim(),
       preferredTransports: _selectedTransport.toList(),
       frequentTransports: _selectedTransport.toList(),
       trackingMode: _selectedTracking,
@@ -525,7 +525,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
       width: double.infinity,
       height: 54,
       child: ElevatedButton(
-        onPressed: _checkValidation()
+        onPressed: _checkValidation() && !_isLoading
             ? () async {
                 User? user = await createUserProfile();
 
