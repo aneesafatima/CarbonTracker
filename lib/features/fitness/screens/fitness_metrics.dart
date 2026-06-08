@@ -11,10 +11,16 @@ class FitnessMetrics extends StatelessWidget {
     return Scaffold(
       body: Consumer(
         builder: (context, ref, child) {
-          final User user = ref.watch(userProvider)!;
-          return Center(
-            child: Text('Welcome to Fitness Metrics Screen ${user.name}'),
-          );
+          final User? user = ref.watch(userProvider);
+          return (user == null
+              ? Center(
+                  child: Text(
+                    'Onboarding not completed. Please complete onboarding to view fitness metrics.',
+                  ),
+                )
+              : Center(
+                  child: Text('Welcome to Fitness Metrics Screen ${user.name}'),
+                ));
         },
       ),
     );
