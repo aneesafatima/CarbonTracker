@@ -143,16 +143,14 @@ class DatabaseHelper {
 
   // Query the user data (since we have a single-user design, we can just return the first row)
 
-  Future<User> queryUser() async {
+  Future<User?> queryUser() async {
     try {
       final Database db = await getDB();
       List<Map<String, dynamic>> results = await db.query("user");
       if (results.isEmpty) {
-        throw AppDatabaseException("User not found");
+        return null; // No user data found
       }
       return User.fromMap(results.first);
-    } on AppDatabaseException {
-      rethrow;
     } on DatabaseException catch (e) {
       throw AppDatabaseException("Failed to query user data: ${e.toString()}");
     }

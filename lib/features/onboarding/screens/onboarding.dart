@@ -1,5 +1,5 @@
+import 'package:carbon_tracker/core/config/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:carbon_tracker/core/config/app_constants.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -57,7 +57,7 @@ class OnboardingScreen extends StatelessWidget {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.pushNamed('user-info');
+                        router.pushNamed('user-info');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.focusedColor,
