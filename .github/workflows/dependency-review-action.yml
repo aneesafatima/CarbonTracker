@@ -101,8 +101,8 @@ jobs:
           # Format: "pkg:npm/name, pkg:pypi/name, pkg:githubactions/owner/repo@version"
           # ── Edit this list when adding approved exceptions ──
           # allow-dependencies-licenses: >-
-          #   pkg:npm/example-package,
-          #   pkg:pypi/example-package
+          #   pkg:npm/aossie-package,
+          #   pkg:pypi/aossie-package
 
           # ── SCOPE FILTERING ─────────────────────────────────
           # Skip dev-only dependencies (test frameworks, linters, etc.)
@@ -131,7 +131,7 @@ jobs:
           show-openssf-scorecard: true
           warn-on-openssf-scorecard-level: 3
 
-  #  Post a status summary badge to PR 
+  #  Post a status summary badge to PR
   # summarize:
   #   name: Post Review Summary
   #   runs-on: ubuntu-latest

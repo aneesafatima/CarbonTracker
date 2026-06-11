@@ -28,6 +28,7 @@ class DatabaseHelper {
           await db.execute('''
             CREATE TABLE user (
             id INTEGER PRIMARY KEY CHECK (id = 1),
+            name TEXT NOT NULL,
             preferred_transports TEXT NOT NULL,
             frequent_transports TEXT NOT NULL,
             tracking_mode TEXT NOT NULL,
