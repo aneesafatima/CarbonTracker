@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:carbon_tracker/core/config/app_routes.dart';
+import 'package:carbon_tracker/core/config/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/config/app_constants.dart';
 

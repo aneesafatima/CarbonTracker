@@ -13,4 +13,5 @@ class AppColors {
   static const Color unselectedBorderColor = Color(0xFFC7C8B5);
   static const Color modalBackgroundColor = Color(0xFFF2F0E0);
   static const Color modalBorderColor = Color(0xFFD7D3BE);
+  static const Color metricsBackgroundColor = Color(0x0A9BAD50);
 }

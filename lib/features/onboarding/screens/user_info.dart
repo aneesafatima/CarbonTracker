@@ -1,4 +1,4 @@
-import 'package:carbon_tracker/core/config/app_routes.dart';
+import 'package:carbon_tracker/core/config/route_constants.dart';
 import 'package:carbon_tracker/database/models/user.dart';
 import 'package:carbon_tracker/features/onboarding/providers/user_provider.dart';
 import 'package:carbon_tracker/features/onboarding/repositories/user_repository.dart';
@@ -14,6 +14,7 @@ import 'package:carbon_tracker/features/onboarding/data/tracking_modes_info.dart
     as tracking;
 import 'package:carbon_tracker/features/onboarding/widgets/modal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class UserInfoScreen extends ConsumerStatefulWidget {
   const UserInfoScreen({super.key});
@@ -97,7 +98,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
       return user;
     } catch (e) {
       // Handle any errors that occur during insertion
-      print("Error creating user profile: $e");
+      debugPrint("Error creating user profile: $e");
       return null;
     } finally {
       if (mounted) {
@@ -534,7 +535,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
 
                 if (user != null) {
                   ref.read(userProvider.notifier).setUser(user);
-                  router.go('/fitness-metrics');
+                  context.goNamed(RouteNames.fitnessMetrics);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

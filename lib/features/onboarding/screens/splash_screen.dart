@@ -1,8 +1,9 @@
+import 'package:carbon_tracker/core/config/route_constants.dart';
 import 'package:carbon_tracker/features/onboarding/providers/user_provider.dart';
 import 'package:carbon_tracker/features/onboarding/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:carbon_tracker/core/config/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -24,15 +25,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (!mounted) return;
 
       if (user == null) {
-        router.goNamed('onboarding');
+        context.goNamed(RouteNames.onboarding);
       } else {
         ref.read(userProvider.notifier).setUser(user);
-        router.goNamed('fitness-metrics');
+        context.goNamed(RouteNames.fitnessMetrics);
       }
     } catch (e, st) {
       debugPrint('Error checking user: $e\n$st');
       if (!mounted) return;
-      router.goNamed('onboarding');
+      context.goNamed(RouteNames.onboarding);
     }
   }
 
