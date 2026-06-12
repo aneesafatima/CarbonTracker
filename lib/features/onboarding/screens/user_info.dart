@@ -54,7 +54,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   }
 
   bool _isWeightValid() {
-    if (_weight == 0.0 || _weight <= 0 || _weight > 500) {
+    if (_weight < 1 || _weight > 500) {
       return false;
     }
     return true;
@@ -535,8 +535,10 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
 
                 if (user != null) {
                   ref.read(userProvider.notifier).setUser(user);
-                  context.goNamed(RouteNames.fitnessMetrics);
+                  context.goNamed(RouteNames.mainScreen);
                 } else {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(

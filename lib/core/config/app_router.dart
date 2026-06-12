@@ -26,8 +26,8 @@ final router = GoRouter(
     ),
 
     GoRoute(
-      path: RoutePaths.fitnessMetrics,
-      name: RouteNames.fitnessMetrics,
+      path: RoutePaths.mainScreen,
+      name: RouteNames.mainScreen,
       builder: (context, state) => const MainScreen(),
     ),
   ],

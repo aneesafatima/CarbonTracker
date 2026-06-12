@@ -220,6 +220,7 @@ class DatabaseHelper {
   Future<void> initializeUser() async {
     Map<String, dynamic> user = {
       'id': 1,
+      'name' : 'test user',
       'preferred_transports': '["car", "bus"]',
       'frequent_transports': '["car"]',
       'tracking_mode': 'refresh',
