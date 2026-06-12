@@ -28,7 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         context.goNamed(RouteNames.onboarding);
       } else {
         ref.read(userProvider.notifier).setUser(user);
-        context.goNamed(RouteNames.fitnessMetrics);
+        context.goNamed(RouteNames.mainScreen);
       }
     } catch (e, st) {
       debugPrint('Error checking user: $e\n$st');
