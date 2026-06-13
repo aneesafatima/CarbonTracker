@@ -78,9 +78,9 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
       frequentTransports: _selectedTransport.toList(),
       trackingMode: _selectedTracking,
       weight: _weight,
-      sustainabilityThoughts: sustainabilityThoughts.isEmpty
+      sustainabilityThoughts: sustainabilityThoughts.trim().isEmpty
           ? null
-          : sustainabilityThoughts,
+          : sustainabilityThoughts.trim(),
       lastResetMonth: DateTime.now().month,
       lastResetYear: DateTime.now().year,
     );
