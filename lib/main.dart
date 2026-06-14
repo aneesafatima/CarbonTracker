@@ -3,7 +3,7 @@ import 'package:carbon_tracker/core/config/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/config/app_constants.dart';
 
-void main()  async {
+void main() async {
   runApp(ProviderScope(child: const MyApp()));
 }
 
