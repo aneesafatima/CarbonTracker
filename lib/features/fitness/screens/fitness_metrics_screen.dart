@@ -1,8 +1,8 @@
 import 'package:carbon_tracker/core/config/app_constants.dart';
 import 'package:carbon_tracker/database/models/user.dart';
 import 'package:carbon_tracker/features/fitness/data/fitness_data.dart';
-import 'package:carbon_tracker/features/fitness/widgets/ActivityCard.dart';
-import 'package:carbon_tracker/features/fitness/widgets/StatCard.dart';
+import 'package:carbon_tracker/features/fitness/widgets/activity_card.dart';
+import 'package:carbon_tracker/features/fitness/widgets/stat_card.dart';
 import 'package:carbon_tracker/features/onboarding/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

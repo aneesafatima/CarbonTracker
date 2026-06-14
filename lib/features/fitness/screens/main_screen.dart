@@ -1,4 +1,4 @@
-import 'package:carbon_tracker/features/fitness/screens/fitness_metrics.dart';
+import 'package:carbon_tracker/features/fitness/screens/fitness_metrics_screen.dart';
 import 'package:carbon_tracker/features/maps/screens/map.dart';
 import 'package:carbon_tracker/features/profile/screens/profile.dart';
 import 'package:flutter/material.dart';
