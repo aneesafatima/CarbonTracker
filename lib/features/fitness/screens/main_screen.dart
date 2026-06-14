@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  List<Widget> screens = [FitnessMetricsScreen(), MapScreen(), ProfileScreen()];
+  List<Widget> screens = [FitnessMetrics(), MapScreen(), ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
