@@ -1,4 +1,7 @@
 class RouteNames {
+
+  RouteNames._();
+
   static const splash = 'splash';
   static const onboarding = 'onboarding';
   static const userInfo = 'user-info';
@@ -6,6 +9,9 @@ class RouteNames {
 }
 
 class RoutePaths {
+
+  RoutePaths._();
+
   static const splash = '/';
   static const onboarding = '/onboarding';
   static const userInfo = '/user-info';

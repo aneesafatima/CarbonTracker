@@ -270,7 +270,6 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
                       option['label'] as String,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
                         color: isSelected
                             ? AppColors.focusedColor
                             : AppColors.textDark,
@@ -366,7 +365,6 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
                       option['label'] as String,
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w400,
                         color: isSelected
                             ? AppColors.focusedColor
                             : AppColors.textDark,
@@ -562,7 +560,6 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
                 'Continue',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w400,
                   letterSpacing: 0.3,
                 ),
               ),

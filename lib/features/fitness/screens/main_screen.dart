@@ -1,4 +1,4 @@
-import 'package:carbon_tracker/features/fitness/screens/fitness_metrics.dart';
+import 'package:carbon_tracker/features/fitness/screens/fitness_metrics_screen.dart';
 import 'package:carbon_tracker/features/maps/screens/map.dart';
 import 'package:carbon_tracker/features/profile/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  List<Widget> screens = [FitnessMetrics(), MapScreen(), ProfileScreen()];
+  List<Widget> screens = [FitnessMetricsScreen(), MapScreen(), ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
