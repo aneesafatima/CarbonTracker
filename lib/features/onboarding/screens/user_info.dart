@@ -1,19 +1,29 @@
+import 'package:carbon_tracker/core/config/route_constants.dart';
+import 'package:carbon_tracker/database/models/user.dart';
+import 'package:carbon_tracker/features/onboarding/providers/user_provider.dart';
+import 'package:carbon_tracker/features/onboarding/repositories/user_repository.dart';
+import 'package:carbon_tracker/shared/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:carbon_tracker/core/config/app_constants.dart';
-import 'package:carbon_tracker/features/onboarding/data/onboarding_options.dart' as options;
-import 'package:carbon_tracker/features/onboarding/data/privacy_policy_info.dart' as privacy;
-import 'package:carbon_tracker/features/onboarding/data/tracking_modes_info.dart' as tracking;
+import 'package:carbon_tracker/features/onboarding/data/onboarding_options.dart'
+    as options;
+import 'package:carbon_tracker/features/onboarding/data/privacy_policy_info.dart'
+    as privacy;
+import 'package:carbon_tracker/features/onboarding/data/tracking_modes_info.dart'
+    as tracking;
 import 'package:carbon_tracker/features/onboarding/widgets/modal.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class UserInfoScreen extends StatefulWidget {
+class UserInfoScreen extends ConsumerStatefulWidget {
   const UserInfoScreen({super.key});
 
   @override
-  State<UserInfoScreen> createState() => _UserInfoScreenState();
+  ConsumerState<UserInfoScreen> createState() => _UserInfoScreenState();
 }
 
-class _UserInfoScreenState extends State<UserInfoScreen> {
+class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   // Transport selections
   final Set<String> _selectedTransport = {};
 
@@ -23,15 +33,80 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   // Privacy policy agreement
   bool _readPrivacyPolicy = false;
 
+  double _weight = 0.0;
+  String sustainabilityThoughts = "";
+  String _name = "";
+
+  // Loading state indicator for when the user profile is being created
+  bool _isLoading = false;
+
   // Weight controller
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _thoughtsController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void dispose() {
     _weightController.dispose();
     _thoughtsController.dispose();
+    _nameController.dispose();
     super.dispose();
+  }
+
+  bool _isWeightValid() {
+    if (_weight < 1 || _weight > 500) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _checkValidation() {
+    if (!_isWeightValid() ||
+        _selectedTransport.isEmpty ||
+        !_readPrivacyPolicy ||
+        _name.trim().isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  User _buildUser() {
+    return User(
+      id: 1,
+      name: _name.trim(),
+      preferredTransports: _selectedTransport.toList(),
+      frequentTransports: _selectedTransport.toList(),
+      trackingMode: _selectedTracking,
+      weight: _weight,
+      sustainabilityThoughts: sustainabilityThoughts.trim().isEmpty
+          ? null
+          : sustainabilityThoughts.trim(),
+      lastResetMonth: DateTime.now().month,
+      lastResetYear: DateTime.now().year,
+    );
+  }
+
+  Future<User?> createUserProfile() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    User user = _buildUser();
+
+    try {
+      await UserRepository().saveUser(user);
+      return user;
+    } catch (e) {
+      // Handle any errors that occur during insertion
+      debugPrint("Error creating user profile: $e");
+      return null;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -57,6 +132,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       const SizedBox(height: 32),
                       _buildTrackingSection(),
                       const SizedBox(height: 32),
+                      _buildNameSection(),
+                      const SizedBox(height: 32),
                       _buildWeightSection(),
                       const SizedBox(height: 32),
                       _buildSustainabilitySection(),
@@ -76,7 +153,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           );
                         },
                         child: Text(
-                          "Read our Privacy Policy",
+                          "Read our Privacy Policy (required)",
                           style: TextStyle(
                             fontSize: 13,
                             color: AppColors.focusedColor,
@@ -341,14 +418,62 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 vertical: 14,
               ),
             ),
+            onChanged: (value) {
+              setState(() {
+                _weight = double.tryParse(value) ?? 0.0;
+              });
+            },
           ),
         ),
         const SizedBox(height: 6),
         Padding(
           padding: const EdgeInsets.only(left: 4),
           child: Text(
-            'Used only for carbon footprint calculation',
+            'Used only for carbon footprint calculation (must be between 1 and 500 kg)',
             style: TextStyle(fontSize: 12, color: AppColors.subtitleText),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Name input section
+
+  Widget _buildNameSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Name',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textDark,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.optionBackgroundColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            controller: _nameController,
+            style: TextStyle(fontSize: 15, color: AppColors.textDark),
+            decoration: InputDecoration(
+              hintText: 'e.g. John Doe',
+              hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 15),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _name = value;
+              });
+            },
           ),
         ),
       ],
@@ -362,7 +487,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Sustainability Thoughts',
+          'Sustainability Thoughts (Optional)',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -386,6 +511,11 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(16),
             ),
+            onChanged: (value) {
+              setState(() {
+                sustainabilityThoughts = value;
+              });
+            },
           ),
         ),
       ],
@@ -397,7 +527,28 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       width: double.infinity,
       height: 54,
       child: ElevatedButton(
-        onPressed: _readPrivacyPolicy ? () {} : null,
+        onPressed: _checkValidation() && !_isLoading
+            ? () async {
+                User? user = await createUserProfile();
+
+                if (!mounted) return;
+
+                if (user != null) {
+                  ref.read(userProvider.notifier).setUser(user);
+                  context.goNamed(RouteNames.mainScreen);
+                } else {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Error creating user profile. Please try again.',
+                      ),
+                    ),
+                  );
+                }
+              }
+            : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.focusedColor,
           foregroundColor: Colors.white,
@@ -405,14 +556,16 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             borderRadius: BorderRadius.circular(50),
           ),
         ),
-        child: const Text(
-          'Continue',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 0.3,
-          ),
-        ),
+        child: _isLoading
+            ? Loader(size: 20.0)
+            : const Text(
+                'Continue',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.3,
+                ),
+              ),
       ),
     );
   }

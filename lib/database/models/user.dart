@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:carbon_tracker/database/models/base_model.dart';
 
-
 class User extends BaseModel {
+  final String name;
   final List<dynamic> preferredTransports;
   final List<dynamic> frequentTransports;
-  final String trackingMode;// Default tracking mode; other modes will be supported later
+  final String
+  trackingMode; // Default tracking mode; other modes will be supported later
   final double weight;
   final String? sustainabilityThoughts;
   final int lastResetMonth;
@@ -16,6 +17,7 @@ class User extends BaseModel {
 
   User({
     super.id,
+    required this.name,
     required this.preferredTransports,
     required this.frequentTransports,
     required this.weight,
@@ -30,6 +32,7 @@ class User extends BaseModel {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'],
+      name: map['name'],
       preferredTransports: jsonDecode(map['preferred_transports']),
       frequentTransports: jsonDecode(map['frequent_transports']),
       trackingMode: map['tracking_mode'],
@@ -44,6 +47,7 @@ class User extends BaseModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'name': name,
       'preferred_transports': jsonEncode(preferredTransports),
       'frequent_transports': jsonEncode(frequentTransports),
       'tracking_mode': trackingMode,
