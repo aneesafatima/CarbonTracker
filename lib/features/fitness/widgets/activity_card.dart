@@ -68,20 +68,15 @@ class ActivityCardState extends State<ActivityCard> {
                     ],
                   ),
                 ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onTap: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Icon(
-                      _isExpanded ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: Color(0xFF888780),
-                      size: 18,
-                    ),
+                IconButton(
+                  onPressed: () => setState(() => _isExpanded = !_isExpanded),
+                  tooltip: _isExpanded
+                      ? 'Collapse activity details'
+                      : 'Expand activity details',
+                  icon: Icon(
+                    _isExpanded ? Icons.arrow_upward : Icons.arrow_downward,
+                    color: const Color(0xFF888780),
+                    size: 18,
                   ),
                 ),
               ],

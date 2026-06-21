@@ -10,13 +10,13 @@ final router = GoRouter(
     GoRoute(
       path: RoutePaths.splash,
       name: RouteNames.splash,
-      builder: (context, state) => SplashScreen(),
+      builder: (context, state) => const SplashScreen(),
     ),
 
     GoRoute(
       path: RoutePaths.onboarding,
       name: RouteNames.onboarding,
-      builder: (context, state) => OnboardingScreen(),
+      builder: (context, state) => const OnboardingScreen(),
     ),
 
     GoRoute(

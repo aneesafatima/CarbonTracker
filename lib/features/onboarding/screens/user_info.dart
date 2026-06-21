@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:carbon_tracker/core/config/route_constants.dart';
 import 'package:carbon_tracker/database/models/user.dart';
+import 'package:carbon_tracker/features/onboarding/matchmaking_service.dart';
 import 'package:carbon_tracker/features/onboarding/providers/user_provider.dart';
-import 'package:carbon_tracker/features/onboarding/repositories/user_repository.dart';
 import 'package:carbon_tracker/shared/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +36,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
   bool _readPrivacyPolicy = false;
 
   double _weight = 0.0;
-  String sustainabilityThoughts = "";
+  String _sustainabilityThoughts = "";
   String _name = "";
 
   // Loading state indicator for when the user profile is being created
@@ -78,9 +80,9 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
       frequentTransports: _selectedTransport.toList(),
       trackingMode: _selectedTracking,
       weight: _weight,
-      sustainabilityThoughts: sustainabilityThoughts.trim().isEmpty
+      sustainabilityThoughts: _sustainabilityThoughts.trim().isEmpty
           ? null
-          : sustainabilityThoughts.trim(),
+          : _sustainabilityThoughts.trim(),
       lastResetMonth: DateTime.now().month,
       lastResetYear: DateTime.now().year,
     );
@@ -94,7 +96,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
     User user = _buildUser();
 
     try {
-      await UserRepository().saveUser(user);
+      await ref.read(userProvider.notifier).saveUser(user);
       return user;
     } catch (e) {
       // Handle any errors that occur during insertion
@@ -107,6 +109,24 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
         });
       }
     }
+  }
+
+  Future<String> showMatchmakingModal() async {
+    String result = "";
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    result = await MatchmakingService.showMatchmakingModal();
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+    return result;
   }
 
   @override
@@ -511,7 +531,7 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
             ),
             onChanged: (value) {
               setState(() {
-                sustainabilityThoughts = value;
+                _sustainabilityThoughts = value;
               });
             },
           ),
@@ -527,12 +547,33 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
       child: ElevatedButton(
         onPressed: _checkValidation() && !_isLoading
             ? () async {
+                /* Matchmaking is only implemented on Android for now, so we show the modal
+                  before navigating to the main screen. On iOS, we skip this step and go directly to the main screen. */
+
+                if (Platform.isAndroid) {
+                  String res = await showMatchmakingModal();
+                  if (res != "proceed" && mounted) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Error during matchmaking: $res. Please try again.',
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+                }
+
                 User? user = await createUserProfile();
 
                 if (!mounted) return;
 
                 if (user != null) {
                   ref.read(userProvider.notifier).setUser(user);
+
+                  if (!mounted) return;
                   context.goNamed(RouteNames.mainScreen);
                 } else {
                   ScaffoldMessenger.of(context).clearSnackBars();
@@ -554,14 +595,12 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
             borderRadius: BorderRadius.circular(50),
           ),
         ),
+
         child: _isLoading
             ? Loader(size: 20.0)
             : const Text(
                 'Continue',
-                style: TextStyle(
-                  fontSize: 16,
-                  letterSpacing: 0.3,
-                ),
+                style: TextStyle(fontSize: 16, letterSpacing: 0.3),
               ),
       ),
     );

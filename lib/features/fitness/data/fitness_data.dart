@@ -18,7 +18,7 @@ class StatCardData {
   });
 }
 
-List<StatCardData> stats = [
+final List<StatCardData> stats = [
   StatCardData(
     icon: Icons.local_fire_department_rounded,
     iconColor: const Color(0xFFE8622A),
@@ -114,16 +114,16 @@ class Activity {
   });
 }
 
-List<Activity> activities = [
+final List<Activity> activities = [
   Activity(
     name: 'Morning Run',
     time: 'Today, 7:00 AM',
     icon: ActivityIcons.run.icon,
     iconColor: ActivityIcons.run.iconColor,
     bgColor: ActivityIcons.run.bgColor,
-    calories: '300 kcal',
-    distance: '5.0 km',
-    pace: "6'00\"/km",
+    calories: '300',
+    distance: '5.0',
+    pace: "6'00\"",
   ),
   Activity(
     name: 'Evening Walk',
@@ -131,9 +131,9 @@ List<Activity> activities = [
     icon: ActivityIcons.walk.icon,
     iconColor: ActivityIcons.walk.iconColor,
     bgColor: ActivityIcons.walk.bgColor,
-    calories: '150 kcal',
-    distance: '3.2 km',
-    pace: "8'00\"/km",
+    calories: '150',
+    distance: '3.2',
+    pace: "8'00\"",
   ),
   Activity(
     name: 'Cycling',
@@ -141,8 +141,8 @@ List<Activity> activities = [
     icon: ActivityIcons.bike.icon,
     iconColor: ActivityIcons.bike.iconColor,
     bgColor: ActivityIcons.bike.bgColor,
-    calories: '400 kcal',
-    distance: '10.0 km',
-    pace: "3'00\"/km",
+    calories: '400',
+    distance: '10.0',
+    pace: "3'00\"",
   ),
 ];

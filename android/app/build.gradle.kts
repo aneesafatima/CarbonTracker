@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    namespace = "com.aossie.carbontracker"
-    compileSdk = flutter.compileSdkVersion
+    namespace = "org.aossie.carbontracker"
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -16,10 +16,10 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.aossie.carbontracker"
+        applicationId = "org.aossie.carbontracker"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -42,4 +42,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("androidx.health.connect:connect-client:1.2.0-alpha04")
 }
