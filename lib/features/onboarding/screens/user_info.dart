@@ -552,7 +552,10 @@ class _UserInfoScreenState extends ConsumerState<UserInfoScreen> {
 
                 if (Platform.isAndroid) {
                   String res = await showMatchmakingModal();
-                  if (res != "proceed" && mounted) {
+
+                  if (!mounted) return;
+
+                  if (res != "proceed") {
                     ScaffoldMessenger.of(context).clearSnackBars();
 
                     ScaffoldMessenger.of(context).showSnackBar(
