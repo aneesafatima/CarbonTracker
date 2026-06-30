@@ -11,17 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class FitnessMetricsScreen extends StatefulWidget {
+class FitnessMetricsScreen extends ConsumerStatefulWidget {
   const FitnessMetricsScreen({super.key});
 
   @override
-  State<FitnessMetricsScreen> createState() => _FitnessMetricsScreenState();
+  ConsumerState<FitnessMetricsScreen> createState() =>
+      _FitnessMetricsScreenState();
 }
 
-class _FitnessMetricsScreenState extends State<FitnessMetricsScreen> {
+class _FitnessMetricsScreenState extends ConsumerState<FitnessMetricsScreen> {
   List<StatCardData> _stats = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool _isRefreshing = false;
+  bool _permissionsGranted = false;
 
   @override
   void initState() {
@@ -32,6 +34,20 @@ class _FitnessMetricsScreenState extends State<FitnessMetricsScreen> {
   // Fetch health data and update the state
 
   Future<void> getStats() async {
+    final user = ref.read(userProvider);
+
+    if (user == null) {
+      if (mounted) {
+        setState(() {
+          _stats = [];
+          _permissionsGranted = false;
+          _isRefreshing = false;
+        });
+      }
+
+      return;
+    }
+
     List<StatCardData> data = [];
 
     setState(() {
@@ -39,11 +55,10 @@ class _FitnessMetricsScreenState extends State<FitnessMetricsScreen> {
     });
 
     try {
-      bool permissionsGranted = await HealthService.requestPermissions();
-
-      if (!permissionsGranted) {
+      if (!await HealthService.requestPermissions()) {
         setState(() {
           _stats = [];
+          _permissionsGranted = false;
         });
         return;
       }
@@ -51,6 +66,7 @@ class _FitnessMetricsScreenState extends State<FitnessMetricsScreen> {
       if (!mounted) return;
       setState(() {
         _stats = data;
+        _permissionsGranted = true;
       });
     } catch (e) {
       debugPrint('Error fetching health data: $e');
@@ -173,77 +189,70 @@ class _FitnessMetricsScreenState extends State<FitnessMetricsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer(
-        builder: (context, ref, child) {
-          final User? user = ref.watch(userProvider);
-          return (user == null
-              ? Center(
-                  child: Text(
-                    'Onboarding not completed. Please complete onboarding to view fitness metrics.',
-                  ),
-                )
-              : SafeArea(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 24,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildHeader(user),
-                        const SizedBox(height: 24),
-                        _stats.isEmpty
-                            ? _isLoading
-                                  ? Center(
-                                      child: const CircularProgressIndicator(
-                                        color: AppColors.primaryColor,
-                                      ),
-                                    )
-                                  : Center(
-                                      child: const Text(
-                                        'No fitness metrics available. Please ensure you have granted the necessary permissions and have health data available.',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: AppColors.subtitleText,
-                                        ),
-                                      ),
-                                    )
-                            : _buildStatsGrid(),
-                        const SizedBox(height: 20),
+    final user = ref.watch(userProvider);
 
-                        GestureDetector(
-                          onTap: () {
-                            showInfoModal(
-                              context,
-                              "Why Some Health Metrics Aren’t Available",
-                              metricsModalData,
-                            );
-                          },
-                          child: const Text(
-                            "Can't see some metrics?",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.secondaryColor,
-                              decoration: TextDecoration.underline,
+    return Scaffold(
+      body: user == null
+          ? const Center(
+              child: Text(
+                'Onboarding not completed. Please complete onboarding to view fitness metrics.',
+              ),
+            )
+          : SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(user),
+                    const SizedBox(height: 24),
+                    _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          )
+                        : _permissionsGranted
+                        ? _buildStatsGrid()
+                        : const Center(
+                            child: Text(
+                              'No fitness metrics available. Please ensure you have granted the necessary permissions and have health data available.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.subtitleText,
+                              ),
                             ),
                           ),
+                    const SizedBox(height: 20),
+
+                    GestureDetector(
+                      onTap: () {
+                        showInfoModal(
+                          context,
+                          "Why Some Health Metrics Aren’t Available",
+                          metricsModalData,
+                        );
+                      },
+                      child: const Text(
+                        "Can't see some metrics?",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.secondaryColor,
+                          decoration: TextDecoration.underline,
                         ),
-
-                        const SizedBox(height: 30),
-
-                        if (Platform.isAndroid) _buildRecentActivity(),
-
-                        // These activities are only available on Android watches with the companion watch app installed and running.
-                        // On iOS, this section will not be displayed.
-                        // This list will be made dynamic in the future when we implement the companion watch app for Android.
-                      ],
+                      ),
                     ),
-                  ),
-                ));
-        },
-      ),
+
+                    const SizedBox(height: 30),
+
+                    if (Platform.isAndroid) _buildRecentActivity(),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
